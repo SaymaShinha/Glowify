@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 🌸 LIGHT – Cosmetic Luxury */
+@plugin "daisyui/theme" {
+  name: "cosmetic";
+  default: true;
+
+  --color-base-100: #FFF7F9;
+  --color-base-200: #FFEFF3;
+  --color-base-300: #FDE2E7;
+  --color-base-content: #3A2E2E;
+
+  --color-primary: #E11D48; /* rose */
+  --color-primary-content: #FFFFFF;
+
+  --color-secondary: #D4AF37; /* gold */
+  --color-secondary-content: #3A2E2E;
+
+  --color-accent: #BE185D; /* berry */
+  --color-accent-content: #FFFFFF;
+
+  --color-neutral: #3A2E2E;
+  --color-neutral-content: #FFF7F9;
+
+  --color-info: #0EA5E9;
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+
+  --rounded-box: 1rem;
+  --rounded-btn: 9999px;
+}
+
+/* 🌙 DARK – Elegant Beauty Night */
+@plugin "daisyui/theme" {
+  name: "cosmeticdark";
+  prefersdark: true;
+
+  --color-base-100: #1A1416;
+  --color-base-200: #22181B;
+  --color-base-300: #2A1F23;
+  --color-base-content: #FCE7F3;
+
+  --color-primary: #FB7185; /* soft rose glow */
+  --color-primary-content: #2A0E12;
+
+  --color-secondary: #E6C200; /* muted gold */
+  --color-secondary-content: #2A1F00;
+
+  --color-accent: #F472B6; /* pink highlight */
+  --color-accent-content: #2A0E12;
+
+  --color-neutral: #140F11;
+  --color-neutral-content: #FCE7F3;
+
+  --color-info: #38BDF8;
+  --color-success: #4ADE80;
+  --color-warning: #FACC15;
+  --color-error: #F87171;
+
+  --rounded-box: 1rem;
+  --rounded-btn: 9999px;
+}
+
+/* 🧊 ADMIN – Modern Clean Dashboard */
+@plugin "daisyui/theme" {
+  name: "cosmeticadmin";
+
+  --color-base-100: #F4F7FB;
+  --color-base-200: #E9EEF5;
+  --color-base-300: #DCE4EE;
+  --color-base-content: #1E293B;
+
+  --color-primary: #6366F1; /* indigo */
+  --color-primary-content: #FFFFFF;
+
+  --color-secondary: #06B6D4; /* cyan */
+  --color-secondary-content: #FFFFFF;
+
+  --color-accent: #8B5CF6; /* violet */
+  --color-accent-content: #FFFFFF;
+
+  --color-neutral: #1E293B;
+  --color-neutral-content: #F8FAFC;
+
+  --color-info: #0EA5E9;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+
+  --rounded-box: 1.25rem;
+  --rounded-btn: 0.9rem;
+  --rounded-badge: 9999px;
+
+  --border-btn: 1px;
+
+  --animation-btn: 0.25s;
+  --animation-input: 0.2s;
+}
