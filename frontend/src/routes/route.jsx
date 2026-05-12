@@ -41,16 +41,16 @@ const router = createBrowserRouter([
   {
     path: "/auth", Component: AuthLayout, children: [
       { index: true, Component: RegistrationForm },
-      { path: "/auth/login", Component: LoginForm },
+      { path: "login", Component: LoginForm },
 
     ]
   },
   {
     path:"/admin", Component: AdminLayout, children: [
       {index:true, Component:Overview},
-      {path:"/admin/users", Component: UserList},
-      {path:"/admin/products", Component: AdminProductList},
-      {path:"/admin/add-product", Component: AdminAddProduct},
+      {path:"users", Component: UserList},
+      {path:"products", Component: AdminProductList},
+      {path:"add-product", Component: AdminAddProduct},
     ]
   }
 ]);
