@@ -105,9 +105,10 @@ export default function ProductForm() {
       localStorage.getItem("token");
 
     try {
+      const API = import.meta.env.VITE_API_URL;
 
       const res = await fetch(
-        "http://localhost:5000/api/products/",
+        `${API}/api/products/`,
         {
           method: "POST",
 
