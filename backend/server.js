@@ -48,6 +48,10 @@ app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);
 });
 
+app.get("/", (req, res) => {
+  res.send("Glowify API running...");
+});
+
 // error handling
 app.use(notFound);
 app.use(errorHandler); 
