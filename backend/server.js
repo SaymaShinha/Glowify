@@ -37,6 +37,7 @@ app.use("/api/users", userRoutes);
 
 
 app.use(express.static("public"));
+app.use("/products", express.static("products"));
 
 // DB connect
 connectDatabase();
