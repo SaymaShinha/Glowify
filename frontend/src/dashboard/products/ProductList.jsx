@@ -133,8 +133,18 @@ export default function ProductList() {
                     </td>
 
                     <td>
-                      <div className="badge badge-success">
-                        {product.stock >=0 ? <p>Available</p> : <p>Out of Stock</p>}
+                      <div>
+                        {
+                          product.stock > 0 ? (
+                            <div className="badge badge-success">
+                              <p>Available</p>
+                            </div>
+                          ) : (
+                            <div className="badge badge-danger">
+                              <p>Out of Stock</p>
+                            </div>
+                          )
+                        }
                       </div>
                     </td>
 
@@ -161,7 +171,7 @@ export default function ProductList() {
                           </li>
 
                           <li>
-                            <a>View</a>
+                            <a href="">View</a>
                           </li>
                         </ul>
                       </div>

@@ -1,12 +1,9 @@
-import { useState } from "react";
-
-const cartItems = [
-  { id: 1, name: "Matte Lipstick", price: 19.99, qty: 1 },
-  { id: 2, name: "Face Serum", price: 29.99, qty: 2 },
-];
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 
 export default function Checkout() {
   const [placed, setPlaced] = useState(false);
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     name: "",
@@ -16,8 +13,17 @@ export default function Checkout() {
     phone: "",
   });
 
+  const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    const getDataLS = JSON.parse(localStorage.getItem("glowify-cart")) || [];
+    setCartItems(getDataLS);
+  }, []);
+
+  const [showModal, setShowModal] = useState(false);
+
   const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.qty,
+    (sum, item) => sum + item.price * item.quantity,
     0
   );
 
@@ -25,10 +31,43 @@ export default function Checkout() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleOrder = () => {
-    // you would send to API here
-    setPlaced(true);
-  };
+  const handleOrder = async () => {
+    const token = localStorage.getItem("token");
+
+    try {
+      if (cartItems.length > 0 && form.name !== "" && form.email !== "" && form.phone !== "" && form.address !== "" && form.city !== "") {
+        const API = import.meta.env.VITE_API_URL;
+        const formData = new FormData();
+
+        formData.append("name", form.name);
+        formData.append("email", form.email);
+        formData.append("phone", form.phone);
+        formData.append("address", form.address);
+        formData.append("city", form.city);
+
+        formData.append("items", JSON.stringify(cartItems));
+        formData.append("total", total + 5);
+
+        const res = await fetch(`${API}/api/orders`, {
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        });
+
+        const resData = await res.json();
+
+        setPlaced(true);
+        console.log("Success:", resData);
+        localStorage.removeItem("glowify-cart");
+        window.dispatchEvent(new Event("storage"));
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
 
   // 🎉 ORDER CONFIRMATION
   if (placed) {
@@ -50,7 +89,7 @@ export default function Checkout() {
 
           <button
             className="btn btn-primary mt-6"
-            onClick={() => setPlaced(false)}
+            onClick={() => { setPlaced(false), navigate("/") }}
           >
             Continue Shopping
           </button>
@@ -79,6 +118,7 @@ export default function Checkout() {
                 placeholder="Full Name"
                 className="input input-bordered"
                 onChange={handleChange}
+                required
               />
 
               <input
@@ -86,6 +126,7 @@ export default function Checkout() {
                 placeholder="Email"
                 className="input input-bordered"
                 onChange={handleChange}
+                required
               />
 
               <input
@@ -93,6 +134,7 @@ export default function Checkout() {
                 placeholder="Phone"
                 className="input input-bordered md:col-span-2"
                 onChange={handleChange}
+                required
               />
 
               <input
@@ -100,6 +142,7 @@ export default function Checkout() {
                 placeholder="Address"
                 className="input input-bordered md:col-span-2"
                 onChange={handleChange}
+                required
               />
 
               <input
@@ -107,6 +150,7 @@ export default function Checkout() {
                 placeholder="City"
                 className="input input-bordered"
                 onChange={handleChange}
+                required
               />
             </div>
           </div>
@@ -121,14 +165,14 @@ export default function Checkout() {
           <div className="space-y-2">
             {cartItems.map((item) => (
               <div
-                key={item.id}
+                key={item._id}
                 className="flex justify-between text-sm"
               >
                 <span>
-                  {item.name} x {item.qty}
+                  {item.name} x {item.quantity}
                 </span>
                 <span>
-                  ${(item.price * item.qty).toFixed(2)}
+                  ${(item.price * item.quantity).toFixed(2)}
                 </span>
               </div>
             ))}
@@ -166,4 +210,6 @@ export default function Checkout() {
       </div>
     </div>
   );
+
+
 }

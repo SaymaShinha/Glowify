@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import Loading from "../Loading.jsx";
+import Loading from "../components/Loading.jsx";
 import { useState } from "react";
 
 export default function LoginForm() {

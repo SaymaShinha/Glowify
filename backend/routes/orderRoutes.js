@@ -2,16 +2,26 @@
 import express from "express";
 import {
   createOrder,
+  getOrders,
   getMyOrders,
-  updateOrderStatus,
+  deleteOrder,
+  getSingleOrder,
 } from "../controllers/orderController.js";
 import { protect } from "../middlewares/authMiddleware.js";
 import { isAdmin } from "../middlewares/adminMiddleware.js";
+import multer from "multer";
+
+const upload = multer();
 
 const router = express.Router();
 
-router.post("/", protect, createOrder);
+router.post("/", upload.none(), protect, createOrder);
+
+router.get("/", protect, isAdmin, getOrders);
 router.get("/user", protect, getMyOrders);
-router.put("/:id", protect, isAdmin, updateOrderStatus);
+router.get("/:id", protect, isAdmin, getSingleOrder);
+
+router.delete("/:id", protect, isAdmin, deleteOrder);
+
 
 export default router;

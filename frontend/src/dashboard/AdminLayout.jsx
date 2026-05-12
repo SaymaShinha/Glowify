@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from "react-router";
-import AdminProtectedRoute from "../../routes/AdminProtectRoute";
+import AdminProtectedRoute from "../routes/AdminProtectRoute.jsx";
 
 export default function AdminLayout({ children }) {
   const navigate = useNavigate();
@@ -70,7 +70,7 @@ export default function AdminLayout({ children }) {
                     </button>
                   </li>
                   <li>
-                    <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Orders">
+                    <button className="is-drawer-close:tooltip is-drawer-close:tooltip-right" data-tip="Orders" onClick={() => navigate("/admin/orders")}>
                       {/* Orders icon */}
                       <span>🛒</span>
                       <span className="is-drawer-close:hidden">Orders</span>

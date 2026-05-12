@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import ProductCard from "./products/ProductCard.jsx";
+import ProductCard from "../products/ProductCard.jsx";
 import { useState, useEffect } from "react";
 
 export default function Home() {

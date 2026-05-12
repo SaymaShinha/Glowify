@@ -98,7 +98,7 @@ export default function WebHeader() {
             tabIndex={0}
             className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
           >
-            <li><a>Profile</a></li>
+            <li><a onClick={()=>navigate("/user-profile")}>Profile</a></li>
             <li><a>Orders</a></li>
             <li><a onClick={() => removeAuth()}>Logout</a></li>
           </ul>
