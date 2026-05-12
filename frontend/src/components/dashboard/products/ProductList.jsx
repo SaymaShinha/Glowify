@@ -134,7 +134,7 @@ export default function ProductList() {
 
                     <td>
                       <div className="badge badge-success">
-                        {product.status}
+                        {product.stock >=0 ? <p>Available</p> : <p>Out of Stock</p>}
                       </div>
                     </td>
 
