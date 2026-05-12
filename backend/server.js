@@ -14,6 +14,7 @@ import { notFound } from "./middlewares/notFound.js";
 import rateLimiter from "./middlewares/rateLimiter.js";
 
 import connectDatabase from "./config/database.js";
+import path from "path";
 
 const app = express();
 
@@ -37,8 +38,17 @@ app.use("/api/users", userRoutes);
 
 
 app.use(express.static("public"));
-app.use("/products", express.static("products"));
+import express from "express";
+import path from "path";
 
+const app = express();
+
+app.use(
+  "/products",
+  express.static(
+    path.join(process.cwd(), "backend/products")
+  )
+);
 // DB connect
 connectDatabase();
 
