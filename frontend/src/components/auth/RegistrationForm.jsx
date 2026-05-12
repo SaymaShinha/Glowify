@@ -19,7 +19,8 @@ export default function RegistrationForm() {
 
     if (objData.password === objData.confirmPassword) {
       try {
-        const res = await fetch("http://localhost:5000/api/auth/register", {
+        const API = import.meta.env.VITE_API_URL;
+        const res = await fetch(`${API}/api/auth/register`, {
           method: "POST",
           body: data,
         });
