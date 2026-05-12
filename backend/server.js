@@ -1,8 +1,7 @@
-// server.js
 import express from "express";
 import mongoose from "mongoose";
-
 import cors from "cors";
+import path from "path";
 
 import authRoutes from "./routes/authRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
@@ -14,20 +13,29 @@ import { notFound } from "./middlewares/notFound.js";
 import rateLimiter from "./middlewares/rateLimiter.js";
 
 import connectDatabase from "./config/database.js";
-import path from "path";
 
 const app = express();
 
 app.use(cors());
 
 app.use(cors({
-  origin: ["https://glowify-cosmetics.netlify.app",
-           "https://glowify-eight.vercel.app"],
+  origin: [
+    "https://glowify-cosmetics.netlify.app",
+    "https://glowify-eight.vercel.app"
+  ],
   credentials: true
 }));
 
-// 🔒 rate limiting
+// rate limit
 app.use(rateLimiter);
+
+// static images
+app.use(
+  "/products",
+  express.static(
+    path.join(process.cwd(), "backend/products")
+  )
+);
 
 // routes
 app.use("/api/auth", authRoutes);
@@ -35,20 +43,10 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/users", userRoutes);
 
+app.get("/", (req, res) => {
+  res.send("Glowify API running...");
+});
 
-
-app.use(express.static("public"));
-import express from "express";
-import path from "path";
-
-const app = express();
-
-app.use(
-  "/products",
-  express.static(
-    path.join(process.cwd(), "backend/products")
-  )
-);
 // DB connect
 connectDatabase();
 
@@ -58,10 +56,6 @@ app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);
 });
 
-app.get("/", (req, res) => {
-  res.send("Glowify API running...");
-});
-
 // error handling
 app.use(notFound);
-app.use(errorHandler); 
+app.use(errorHandler);
