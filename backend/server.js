@@ -20,7 +20,8 @@ const app = express();
 app.use(cors());
 
 app.use(cors({
-  origin: "https://glowify-cosmetics.netlify.app",
+  origin: ["https://glowify-cosmetics.netlify.app",
+           "https://glowify-upq1-jmwn3mpql-saymashinhas-projects.vercel.app"]
   credentials: true
 }));
 
