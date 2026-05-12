@@ -7,7 +7,8 @@ export default function UserList() {
     const token = localStorage.getItem("token");
     try {
       const getUsersData = async () => {
-        const res = await fetch("http://localhost:5000/api/users/", {
+        const API = import.meta.env.VITE_API_URL;
+        const res = await fetch(`${API}/api/users/`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
