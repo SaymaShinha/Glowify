@@ -21,7 +21,7 @@ app.use(cors());
 
 app.use(cors({
   origin: ["https://glowify-cosmetics.netlify.app",
-           "https://glowify-eight.vercel.app"]
+           "https://glowify-eight.vercel.app"],
   credentials: true
 }));
 
