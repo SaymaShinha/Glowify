@@ -45,7 +45,7 @@ export const createProduct = async (req, res) => {
     try {
       const imageUrls = req.files.map(
         (file) =>
-          `http://localhost:5000/products/${file.filename}`
+          `${process.env.BASE_URL}/products/${file.filename}`
       );
 
       const product = await Product.create({

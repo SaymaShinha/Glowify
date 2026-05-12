@@ -29,7 +29,7 @@ export default function ProductList() {
       throw error;
     }
 
-  }, [products])
+  }, [])
 
 
   return (

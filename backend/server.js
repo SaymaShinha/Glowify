@@ -41,11 +41,6 @@ app.use(express.static("public"));
 // DB connect
 connectDatabase();
 
-
-app.get("/", (req, res) => {
-  res.send("Backend is working in http://localhost:5000");
-});
-
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
