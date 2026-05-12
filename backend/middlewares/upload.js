@@ -5,7 +5,7 @@ import path from "path";
 import fs from "fs";
 
 // Ensure folder exists
-const uploadPath = "public/products";
+const uploadPath = "backend/products";
 
 if (!fs.existsSync(uploadPath)) {
   fs.mkdirSync(uploadPath, { recursive: true });
