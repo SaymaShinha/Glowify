@@ -55,7 +55,7 @@ export default function ProductList() {
 
 
   useEffect(() => {
-    name && setCategory(name);
+    name !== "shop_deal" && setCategory(name);
 
     try {
       const getProductsData = async () => {
