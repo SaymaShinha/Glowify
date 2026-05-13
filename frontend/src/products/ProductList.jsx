@@ -54,12 +54,6 @@ export default function ProductList() {
   }, []);
 
   useEffect(() => {
-    productsData.filter((p) => {
-      return (p.discount >= 20)
-    })
-  }, []);
-
-  useEffect(() => {
     name && setCategory(name);
 
     try {
