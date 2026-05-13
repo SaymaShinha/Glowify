@@ -31,9 +31,10 @@ export default function CategoryForm() {
       );
 
       const resData = await res.json();
-
+      setLoading(false);
+      
       if (res.ok) {
-        setLoading(false);
+
         setShowModal(true);
 
         form.reset();

@@ -36,7 +36,7 @@ const router = createBrowserRouter([
       { index: true, Component: Home },
       { path: "/productlist", Component: ProductList },
       { path: "/productlist/:name", Component: ProductList },
-      { path: "/productlist/:shopDeal", Component: ProductList },
+      { path: "/productlist/:shop_deal", Component: ProductList },
       {
         path: "/cart", element:
           (<ProtectedRoute>
@@ -78,7 +78,7 @@ const router = createBrowserRouter([
       { path: "orders/:id", Component: OrderDetails },
       { path: "view-product/:id", Component: ViewProduct },
       { path: "categories", Component: CategoryList },
-      {path:"add-category", Component: CategoryForm},
+      { path: "add-category", Component: CategoryForm },
 
     ]
   }

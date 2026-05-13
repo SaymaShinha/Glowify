@@ -150,7 +150,7 @@ export default function Home() {
                                 <p className="py-3">
                                     Limited time offer. Get glowing today!
                                 </p>
-                                <button className="btn btn-secondary" onClick={() => navigate(`/productlist/${"shop_deal"}`)}>
+                                <button className="btn btn-secondary" onClick={() => navigate(`/productlist/shop_deal`)}>
                                     Shop Deals
                                 </button>
                             </div>

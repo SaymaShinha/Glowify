@@ -5,7 +5,6 @@ import { useParams } from "react-router";
 
 export default function ProductList() {
   const { name } = useParams();
-  const { shopDeal } = useParams();
   const [category, setCategory] = useState("all");
   const [skin, setSkin] = useState("all");
   const [maxPrice, setMaxPrice] = useState(500);
@@ -53,6 +52,8 @@ export default function ProductList() {
 
   }, []);
 
+
+
   useEffect(() => {
     name && setCategory(name);
 
@@ -80,21 +81,20 @@ export default function ProductList() {
 
   }, [])
 
-
-  const filteredProducts = shopDeal ? productsData.filter((p) => {
-    return (p.discount >= 20)
-  }) :
-    productsData.filter((p) => {
-      return (
-        (category === "all" ||
-          p.category === category) &&
-
-        (skin === "all" ||
-          p.skinType === skin) &&
-
-        Number(p.price) <= maxPrice
-      );
-    });
+  const filteredProducts =
+    name === "shop_deal"
+      ? productsData.filter((p) =>
+        Number(p.discount) >= 20
+      )
+      : productsData.filter((p) => {
+        return (
+          (category === "all" ||
+            p.category === category) &&
+          (skin === "all" ||
+            p.skinType === skin) &&
+          Number(p.price) <= maxPrice
+        );
+      });
 
   return (
     <div data-theme="cosmetic" className="min-h-screen bg-base-200 p-6">
@@ -140,7 +140,7 @@ export default function ProductList() {
             >
               <option value="all">All</option>
               {categories.map((cat) => (
-                <option value={cat.name} key={cat}>{cat.name}</option>
+                <option value={cat.name} key={cat._id}>{cat.name}</option>
               ))}
             </select>
           </div>
