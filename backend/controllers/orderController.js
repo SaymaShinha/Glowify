@@ -103,9 +103,7 @@ export const deleteOrder = async (req, res) => {
       success: true,
       message: "Order deleted successfully",
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
       message: error.message,
@@ -115,7 +113,9 @@ export const deleteOrder = async (req, res) => {
 };
 
 export const getMyOrders = async (req, res) => {
-  const orders = await Order.find({ userId: req.user._id });
+  const { id } = req.params;
+
+  const orders = await Order.find({ userId: id });
   res.json(orders);
 };
 
@@ -124,3 +124,15 @@ export const getSingleOrder = async (req, res) => {
   const orders = await Order.find({ _id: id })
   res.json(orders);
 }
+
+export const updateOrderStatus = async (req, res) => {
+  const {id} = req.params;
+
+  const order = await Order.findByIdAndUpdate(
+    id,
+    req.body,
+    { new: true }
+  );
+  res.json(order);
+};
+

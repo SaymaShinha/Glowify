@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import ProtectedRoute from "../routes/ProtectRoute.jsx";
+
 
 export default function WebHeader() {
   const navigate = useNavigate();
+  const {id} = useParams();
 
   const [theme, setTheme] = useState("cosmetic");
-  const [cartCount, setCartCount] = useState(0); // demo
+  const [cartCount, setCartCount] = useState(0);
 
   // Function to load cart count
   const loadCartCount = () => {
@@ -54,7 +57,7 @@ export default function WebHeader() {
         </div>
 
         {/* Logo */}
-        <a className="btn btn-ghost text-xl font-bold" href="/">
+        <a className="btn btn-ghost text-xl font-bold" href={`/${id}`}>
           Glowify
         </a>
       </div>
@@ -72,38 +75,32 @@ export default function WebHeader() {
       {/* RIGHT */}
       <div className="navbar-end gap-2">
 
-        {/* Search */}
-        <input
-          type="text"
-          placeholder="Search..."
-          className="input input-bordered input-sm w-24 md:w-auto"
-        />
-
         {/* Cart */}
         <div className="indicator">
           <span className="indicator-item badge badge-primary badge-sm">
             {cartCount}
           </span>
-          <button className="btn btn-ghost btn-circle" onClick={() => navigate("/cart")}>
+          <button className="btn btn-ghost btn-circle" onClick={() => navigate(`/cart/${id}`)}>
             🛒
           </button>
         </div>
 
-        {/* Profile */}
-        <div className="dropdown dropdown-end">
-          <label tabIndex={0} className="btn btn-ghost btn-circle">
-            👤
-          </label>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
-          >
-            <li><a onClick={()=>navigate("/user-profile")}>Profile</a></li>
-            <li><a>Orders</a></li>
-            <li><a onClick={() => removeAuth()}>Logout</a></li>
-          </ul>
-        </div>
-
+        <ProtectedRoute>
+          {/* Profile */}
+          <div className="dropdown dropdown-end">
+            <label tabIndex={0} className="btn btn-ghost btn-circle">
+              👤
+            </label>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li><a onClick={() => navigate(`/user-profile/${id}`)}>Profile</a></li>
+              <li><a onClick={()=>navigate(`/orders/user/${id}`)}>Orders</a></li>
+              <li><a onClick={() => removeAuth()}>Logout</a></li>
+            </ul>
+          </div>
+        </ProtectedRoute>
       </div>
     </div>
   );

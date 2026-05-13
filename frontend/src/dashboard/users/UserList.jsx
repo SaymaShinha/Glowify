@@ -70,7 +70,7 @@ export default function UserList() {
               <tbody>
                 {/* row 1 */}
                 {users?.map((user) => (
-                  <tr className="hover">
+                  <tr className="hover" key={user._id}>
                     <td>
                       <div className="flex items-center gap-4">
                         <div>
@@ -118,15 +118,7 @@ export default function UserList() {
                           className="dropdown-content menu bg-base-100 rounded-box z-10 w-40 p-2 shadow"
                         >
                           <li>
-                            <a>Edit</a>
-                          </li>
-
-                          <li>
-                            <a>Delete</a>
-                          </li>
-
-                          <li>
-                            <a>View</a>
+                            <a>Track Activity</a>
                           </li>
                         </ul>
                       </div>

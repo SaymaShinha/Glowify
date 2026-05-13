@@ -1,4 +1,3 @@
-// models/Category.js
 import mongoose from "mongoose";
 
 const categorySchema = new mongoose.Schema(
@@ -7,20 +6,26 @@ const categorySchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      trim: true
     },
 
     description: {
-      type: String
+      type: String,
+      required: true,
     },
 
     image: {
-      type: String // store image URL
-    }
+      type: String,
+      required: true,
+    },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
-export default mongoose.model("Category", categorySchema);
+const Category = mongoose.model(
+  "Category",
+  categorySchema
+);
+
+export default Category;

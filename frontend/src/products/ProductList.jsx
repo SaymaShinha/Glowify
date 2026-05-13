@@ -1,70 +1,67 @@
 import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
-
-const productCategories = [
-  "Cleanser",
-  "Face Wash",
-  "Toner",
-  "Serum",
-  "Moisturizer",
-  "Night Cream",
-  "Day Cream",
-  "Eye Cream",
-  "Sunscreen",
-  "Face Mask",
-  "Sheet Mask",
-  "Exfoliator",
-  "Scrub",
-  "Lip Balm",
-  "Lip Scrub",
-  "Lipstick",
-  "Foundation",
-  "Concealer",
-  "Primer",
-  "BB Cream",
-  "CC Cream",
-  "Blush",
-  "Highlighter",
-  "Contour",
-  "Compact Powder",
-  "Loose Powder",
-  "Setting Spray",
-  "Eyeliner",
-  "Mascara",
-  "Eyeshadow",
-  "Eyebrow Pencil",
-  "Makeup Remover",
-  "Micellar Water",
-  "Body Lotion",
-  "Body Butter",
-  "Body Wash",
-  "Hand Cream",
-  "Foot Cream",
-  "Shampoo",
-  "Conditioner",
-  "Hair Serum",
-  "Hair Oil",
-  "Hair Mask",
-  "Scalp Treatment",
-  "Acne Treatment",
-  "Anti-Aging",
-  "Brightening",
-  "Hydrating",
-  "Sensitive Skin Care",
-  "Men's Grooming",
-];
-
+import { useParams } from "react-router";
 
 
 export default function ProductList() {
+  const { name } = useParams();
+  const { shopDeal } = useParams();
   const [category, setCategory] = useState("all");
   const [skin, setSkin] = useState("all");
-  const [maxPrice, setMaxPrice] = useState(50);
-
+  const [maxPrice, setMaxPrice] = useState(500);
   const [productsData, setProductsData] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [categories, setCategories] = useState([]);
 
 
   useEffect(() => {
+
+    const getCategories = async () => {
+
+      try {
+
+        const API = import.meta.env.VITE_API_URL;
+
+        const res = await fetch(
+          `${API}/api/categories/`,
+          {
+            method: "GET",
+          }
+        );
+
+        const resData = await res.json();
+
+        if (res.ok) {
+          setCategories(resData.data);
+          console.log("Success:", resData);
+
+        } else {
+
+          console.log("Error:", resData.message);
+
+        }
+
+      } catch (error) {
+
+        console.log(error);
+
+      }
+
+    };
+
+    getCategories();
+
+  }, []);
+
+  useEffect(() => {
+    productsData.filter((p) => {
+      return (p.discount >= 20)
+    })
+  }, []);
+
+  useEffect(() => {
+    name && setCategory(name);
+
     try {
       const getProductsData = async () => {
         const API = import.meta.env.VITE_API_URL;
@@ -90,7 +87,9 @@ export default function ProductList() {
   }, [])
 
 
-  const filteredProducts =
+  const filteredProducts = shopDeal ? productsData.filter((p) => {
+    return (p.discount >= 20)
+  }) :
     productsData.filter((p) => {
       return (
         (category === "all" ||
@@ -105,6 +104,29 @@ export default function ProductList() {
 
   return (
     <div data-theme="cosmetic" className="min-h-screen bg-base-200 p-6">
+
+      {showModal && (
+        <dialog className="modal modal-open">
+          <div className="modal-box">
+
+            <p className="py-4">
+              Product has been added to Cart
+            </p>
+
+            <div className="modal-action">
+              <button
+                className="btn btn-primary"
+                onClick={() =>
+                  setShowModal(false)
+                }
+              >
+                Close
+              </button>
+            </div>
+
+          </div>
+        </dialog>
+      )}
 
       <h1 className="text-3xl font-bold mb-6">Products</h1>
 
@@ -123,7 +145,7 @@ export default function ProductList() {
               onChange={(e) => setCategory(e.target.value)}
             >
               <option value="all">All</option>
-              {productCategories.map((cat) => (
+              {categories.map((cat) => (
                 <option value={cat} key={cat}>{cat}</option>
               ))}
             </select>
@@ -152,7 +174,7 @@ export default function ProductList() {
             <input
               type="range"
               min="0"
-              max="100"
+              max="2000"
               value={maxPrice}
               onChange={(e) => setMaxPrice(Number(e.target.value))}
               className="range range-primary"
@@ -172,7 +194,7 @@ export default function ProductList() {
                 key={product._id}
                 id={product._id}
                 product={product}
-                onAddToCart={() => console.log("Product has been added")} ></ProductCard>
+                onAddToCart={() => { setShowModal(true); console.log("Product has been added") }} ></ProductCard>
             ))
           )}
 

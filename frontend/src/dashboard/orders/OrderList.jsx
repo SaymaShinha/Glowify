@@ -6,7 +6,6 @@ export default function OrderList() {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
-
   useEffect(() => {
     try {
       const getOrderData = async () => {
@@ -70,6 +69,45 @@ export default function OrderList() {
 
     }
   }
+
+
+  const handleStatusChange = async (id, value) => {
+    try {
+      const API = import.meta.env.VITE_API_URL;
+
+      const res = await fetch(
+        `${API}/api/orders/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            status: value,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Order updated");
+        setOrders((prev) =>
+          prev.map((order) =>
+            order._id === id
+              ? { ...order, status: value }
+              : order
+          )
+        );
+        console.log(data);
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -223,11 +261,37 @@ export default function OrderList() {
 
                   </td>
 
-                  {/* STATUS */}
-                  <td>
+                  {/* Status */}
+                  <td className="space-y-2">
 
-                    <div className="badge badge-info">
-                      <p>{order.status}</p>
+                    <select
+                      className={`select select-sm w-full max-w-xs
+      ${order.status === "pending"
+                          ? "select-warning"
+                          : order.status === "delivered"
+                            ? "select-success"
+                            : "select-error"
+                        }`}
+                      value={order.status}
+                      onChange={(e) =>
+                        handleStatusChange(order._id, e.target.value)
+                      }
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="delivered">Delivered</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
+
+                    <div
+                      className={`badge text-white
+      ${order.status === "pending"
+                          ? "badge-warning"
+                          : order.status === "delivered"
+                            ? "badge-success"
+                            : "badge-error"
+                        }`}
+                    >
+                      {order.status}
                     </div>
 
                   </td>
@@ -251,7 +315,11 @@ export default function OrderList() {
                       >
 
                         <li>
-                          <a onClick={()=>navigate(`/admin/orders/${order._id}`)}>View Details</a>
+                          <a onClick={() => navigate(`/admin/orders/${order._id}`)}>View Details</a>
+                        </li>
+
+                        <li>
+                          <a >Edit</a>
                         </li>
 
                         <li>

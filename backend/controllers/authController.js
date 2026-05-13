@@ -47,13 +47,12 @@ export const register = async (req, res) => {
 // LOGIN
 export const login = async (req, res) => {
   try {
-    console.log(req.body);
     const { email, password } = req.body;
 
     // check user
     const user = await User.findOne({ email });
 
-    console.log(user);
+    console.log("user");
 
     if (!user) {
       return res.status(400).json({ message: "Invalid credentials" });
@@ -75,7 +74,8 @@ export const login = async (req, res) => {
     res.status(200).json({
       message: "Login successful",
       token,
-      "role": user.role
+      "role": user.role,
+      data: user,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

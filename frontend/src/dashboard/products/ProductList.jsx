@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+const token = localStorage.getItem("token");
 
 export default function ProductList() {
   const [products, setProducts] = useState([]);
@@ -30,6 +31,38 @@ export default function ProductList() {
     }
 
   }, [])
+
+
+  const deleteProduct = async (id) => {
+    try {
+      const API = import.meta.env.VITE_API_URL;
+
+      const res = await fetch(
+        `${API}/api/products/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        }
+      );
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setProducts((prev) =>
+          prev.filter((order) => order._id !== id)
+        );
+
+        console.log(data);
+      } else {
+        console.log(data.message);
+      }
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
 
   return (
@@ -74,7 +107,7 @@ export default function ProductList() {
               <tbody>
                 {/* row 1 */}
                 {products.map((product) => (
-                  <tr className="hover">
+                  <tr className="hover" key={product._id}>
                     <td>
                       <div className="flex items-center gap-4">
                         <div className="avatar">
@@ -125,7 +158,7 @@ export default function ProductList() {
                     <td>
                       <div className="flex flex-wrap gap-1 max-w-[200px]">
                         {product.ingredients.map((e) => (
-                          <div className="badge badge-outline">
+                          <div className="badge badge-outline" key={e}>
                             {e}
                           </div>
                         ))}
@@ -163,15 +196,17 @@ export default function ProductList() {
                           className="dropdown-content menu bg-base-100 rounded-box z-10 w-40 p-2 shadow"
                         >
                           <li>
-                            <a>Edit</a>
+                            <a onClick={() => navigate(`/admin/update-product/${product._id}`)}>
+                              Edit
+                            </a>
                           </li>
 
                           <li>
-                            <a>Delete</a>
+                            <a onClick={() => deleteProduct(product._id)}>Delete</a>
                           </li>
 
                           <li>
-                            <a href="">View</a>
+                            <a href={`/admin/view-product/${product._id}`}>View</a>
                           </li>
                         </ul>
                       </div>

@@ -1,70 +1,37 @@
-// middleware/upload.js
+import "../config/env.js";
 
 import multer from "multer";
-import path from "path";
-import fs from "fs";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import { v2 as cloudinary } from "cloudinary";
 
-// Ensure folder exists
-const uploadPath = "backend/products";
+const getUpload = () => {
 
-if (!fs.existsSync(uploadPath)) {
-  fs.mkdirSync(uploadPath, { recursive: true });
-}
+  console.log("UPLOAD ENV:");
+  console.log(process.env.CLOUDINARY_API_KEY);
 
-// Storage config
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadPath);
-  },
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
 
-  filename: (req, file, cb) => {
-    const productName = req.body.name
-      ? req.body.name
-          .toLowerCase()
-          .replace(/\s+/g, "-")
-      : "product";
+  const storage = new CloudinaryStorage({
+    cloudinary,
 
-    const uniqueName =
-      `${productName}-${Date.now()}` +
-      path.extname(file.originalname);
+    params: async (req, file) => ({
+      folder: "products",
 
-    cb(null, uniqueName);
-  },
-});
+      allowed_formats: [
+        "jpg",
+        "jpeg",
+        "png",
+        "webp",
+        "jfif",
+      ],
+    }),
+  });
 
-// File filter
-const fileFilter = (req, file, cb) => {
-  const allowedTypes =
-    /jpeg|jpg|png|jfif|webp/;
-
-  const extname = allowedTypes.test(
-    path.extname(file.originalname).toLowerCase()
-  );
-
-  const mimetype = allowedTypes.test(
-    file.mimetype
-  );
-
-  if (extname && mimetype) {
-    cb(null, true);
-  } else {
-    cb(
-      new Error(
-        "Only jpg, jpeg, png, jfif, webp images are allowed"
-      )
-    );
-  }
+  return multer({ storage });
 };
 
-// Multer upload middleware
-const upload = multer({
-  storage,
-
-  limits: {
-    fileSize: 5 * 1024 * 1024,
-  },
-
-  fileFilter,
-});
-
-export default upload;
+export default getUpload;

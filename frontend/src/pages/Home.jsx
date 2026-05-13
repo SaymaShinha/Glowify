@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate} from "react-router";
 import ProductCard from "../products/ProductCard.jsx";
 import { useState, useEffect } from "react";
 
@@ -6,7 +6,7 @@ export default function Home() {
     const [productsData, setProductsData] = useState([]);
     const [cartCount, setCartCount] = useState(0);
 
-    useEffect(() => {
+    useEffect(() => {        
         try {
             const getProductsData = async () => {
                 const API = import.meta.env.VITE_API_URL;
@@ -101,8 +101,8 @@ export default function Home() {
                             <div
                                 key={i}
                                 className="card bg-base-100 shadow-md hover:shadow-xl transition cursor-pointer"
-                                onClick={()=>navigate(
-                                    
+                                onClick={() => navigate(
+                                    `/productlist/${cat.name}`
                                 )}
                             >
                                 <figure>
@@ -150,7 +150,7 @@ export default function Home() {
                                 <p className="py-3">
                                     Limited time offer. Get glowing today!
                                 </p>
-                                <button className="btn btn-secondary">
+                                <button className="btn btn-secondary" onClick={() => navigate(`/productlist/${"shop_deal"}`)}>
                                     Shop Deals
                                 </button>
                             </div>

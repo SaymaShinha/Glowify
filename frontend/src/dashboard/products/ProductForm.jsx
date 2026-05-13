@@ -1,7 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router";
 
 export default function ProductForm() {
+  const { id } = useParams();
   const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [product, setProduct] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
+
   const [formData, setFormData] = useState({
     ingredients: [],
   });
@@ -19,58 +25,47 @@ export default function ProductForm() {
     "Aloe Vera",
   ];
 
-  const productCategories = [
-    "Cleanser",
-    "Face Wash",
-    "Toner",
-    "Serum",
-    "Moisturizer",
-    "Night Cream",
-    "Day Cream",
-    "Eye Cream",
-    "Sunscreen",
-    "Face Mask",
-    "Sheet Mask",
-    "Exfoliator",
-    "Scrub",
-    "Lip Balm",
-    "Lip Scrub",
-    "Lipstick",
-    "Foundation",
-    "Concealer",
-    "Primer",
-    "BB Cream",
-    "CC Cream",
-    "Blush",
-    "Highlighter",
-    "Contour",
-    "Compact Powder",
-    "Loose Powder",
-    "Setting Spray",
-    "Eyeliner",
-    "Mascara",
-    "Eyeshadow",
-    "Eyebrow Pencil",
-    "Makeup Remover",
-    "Micellar Water",
-    "Body Lotion",
-    "Body Butter",
-    "Body Wash",
-    "Hand Cream",
-    "Foot Cream",
-    "Shampoo",
-    "Conditioner",
-    "Hair Serum",
-    "Hair Oil",
-    "Hair Mask",
-    "Scalp Treatment",
-    "Acne Treatment",
-    "Anti-Aging",
-    "Brightening",
-    "Hydrating",
-    "Sensitive Skin Care",
-    "Men's Grooming",
-  ];
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+
+    const getCategories = async () => {
+
+      try {
+
+        const API = import.meta.env.VITE_API_URL;
+
+        const res = await fetch(
+          `${API}/api/categories/`,
+          {
+            method: "GET",
+          }
+        );
+
+        const resData = await res.json();
+
+        if (res.ok) {
+          setCategories(resData.data);
+          console.log("Success:", resData);
+
+        } else {
+
+          console.log("Error:", resData.message);
+
+        }
+
+      } catch (error) {
+
+        console.log(error);
+
+      }
+
+    };
+
+    getCategories();
+
+  }, []);
+
 
   const handleIngredientChange = (ingredient) => {
     setFormData((prev) => ({
@@ -83,8 +78,9 @@ export default function ProductForm() {
   };
 
 
+  const handleProduct = async (e) => {
+    setLoading(true);
 
-  const addProduct = async (e) => {
     e.preventDefault();
 
     const form = e.currentTarget;
@@ -101,29 +97,32 @@ export default function ProductForm() {
       }
     );
 
-    const token =
-      localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
     try {
+
       const API = import.meta.env.VITE_API_URL;
 
-      const res = await fetch(
-        `${API}/api/products/`,
-        {
-          method: "POST",
+      // dynamic route
+      const url = id
+        ? `${API}/api/products/${id}`
+        : `${API}/api/products`;
 
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      // dynamic method
+      const method = id ? "PUT" : "POST";
 
-          body: data,
-        }
-      );
+      const res = await fetch(url, {
+        method,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: data,
+      });
 
       const resData = await res.json();
 
       if (res.ok) {
-
+        setLoading(false);
         setShowModal(true);
 
         form.reset();
@@ -152,13 +151,56 @@ export default function ProductForm() {
     } catch (error) {
 
       console.log(error);
+
     }
   };
 
 
+
+  // get product by id
+  useEffect(() => {
+    const getProductsData = async () => {
+      try {
+        const API = import.meta.env.VITE_API_URL;
+        const res = await fetch(
+          `${API}/api/products/${id}`
+        );
+
+        const data = await res.json();
+
+        if (res.ok) {
+          setProduct(data.data);
+
+          // set first image
+          setSelectedImage(data.data.images?.[0] || null);
+
+          console.log("Success:", data);
+        } else {
+          console.log("Error:", data.message);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (id) {
+      getProductsData();
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (product?.ingredients) {
+      setFormData({
+        ingredients: product.ingredients,
+      });
+    }
+  }, [product]);
+
+
+
   return (
     <>
-
+      {loading && (<Loading></Loading>)}
 
       {showModal && (
         <dialog className="modal modal-open">
@@ -200,10 +242,7 @@ export default function ProductForm() {
           <div className="space-y-4">
 
             <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                addProduct(e);
-              }}
+              onSubmit={handleProduct}
               className="flex flex-col gap-4 w-full"
             >
 
@@ -212,6 +251,7 @@ export default function ProductForm() {
                 name="name"
                 type="text"
                 placeholder="Product Name"
+                defaultValue={product?.name}
                 className="input input-bordered w-full"
                 required
               />
@@ -221,6 +261,7 @@ export default function ProductForm() {
                 name="price"
                 type="number"
                 placeholder="Product Price"
+                defaultValue={product?.price}
                 className="input input-bordered w-full"
                 required
               />
@@ -230,13 +271,14 @@ export default function ProductForm() {
                 name="discount"
                 type="number"
                 placeholder="Discount"
+                defaultValue={product?.discount}
                 className="input input-bordered w-full"
                 required
               />
               {/* Category */}
               <select
                 name="category"
-                defaultValue=""
+                defaultValue={product?.category}
                 className="select select-bordered w-full"
                 required
               >
@@ -244,12 +286,12 @@ export default function ProductForm() {
                   Select Product Category
                 </option>
 
-                {productCategories.map((category) => (
+                {categories?.map((category) => (
                   <option
-                    key={category}
-                    value={category}
+                    key={category._id}
+                    value={category.name}
                   >
-                    {category}
+                    {category.name}
                   </option>
                 ))}
               </select>
@@ -257,7 +299,7 @@ export default function ProductForm() {
               {/* Skin Type */}
               <select
                 name="skinType"
-                defaultValue=""
+                defaultValue={product?.skinType}
                 className="select select-secondary w-full"
                 required
               >
@@ -299,6 +341,7 @@ export default function ProductForm() {
                 name="stock"
                 type="number"
                 placeholder="Stock"
+                defaultValue={product?.stock}
                 className="input input-bordered w-full"
                 required
               />
@@ -311,31 +354,35 @@ export default function ProductForm() {
                 className="input input-bordered w-full"
                 multiple
                 accept="image/*"
-                required
               />
 
               {/* Description */}
               <textarea
                 name="description"
                 cols={5}
-                type="textarea"
                 placeholder="Description"
-                className="input input-bordered w-full"
+                defaultValue={product?.description}
+                className="textarea textarea-bordered w-full"
                 required
               />
 
               {/* Save */}
-              <button type="submit" className="btn btn-primary w-full">
+
+              {id ? (<button type="submit" className="btn btn-primary w-full">
+                Update Product
+              </button>) : (<button type="submit" className="btn btn-primary w-full">
                 Add Product
-              </button>
+              </button>)}
 
             </form>
 
             {image && (
               <img
+                name="images"
                 src={image}
                 alt="Preview"
                 className="w-48 h-48 object-cover rounded-lg border"
+                multiple
               />
             )}
           </div>

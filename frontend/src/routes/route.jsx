@@ -22,6 +22,10 @@ import AdminProductList from "../dashboard/products/ProductList.jsx";
 import AdminAddProduct from "../dashboard/products/ProductForm.jsx";
 import OrderList from "../dashboard/orders/OrderList.jsx";
 import OrderDetails from "../dashboard/orders/OrderDetails.jsx";
+import UserOrders from "../auth/UserOrders.jsx";
+import ViewProduct from "../dashboard/products/ViewProduct.jsx";
+import CategoryList from "../dashboard/categories/CategoryList.jsx";
+import CategoryForm from "../dashboard/categories/CategoryForm.jsx";
 
 
 const router = createBrowserRouter([
@@ -30,9 +34,12 @@ const router = createBrowserRouter([
     Component: App,
     children: [
       { index: true, Component: Home },
+      { path: "/:id", Component: Home },
       { path: "/productlist", Component: ProductList },
+      { path: "/productlist/:name", Component: ProductList },
+      { path: "/productlist/:shopDeal", Component: ProductList },
       {
-        path: "/cart", element:
+        path: "/cart/:id", element:
           (<ProtectedRoute>
             <Cart></Cart>
           </ProtectedRoute>)
@@ -43,8 +50,13 @@ const router = createBrowserRouter([
         </ProtectedRoute>)
       },
       {
-        path: "/user-profile", element: (<ProtectedRoute>
+        path: "/user-profile/:id", element: (<ProtectedRoute>
           <UserProfile></UserProfile>
+        </ProtectedRoute>)
+      },
+      {
+        path: "/orders/user/:id", element: (<ProtectedRoute>
+          <UserOrders></UserOrders>
         </ProtectedRoute>)
       },
       { path: "/productdetails/:id", Component: ProductDetails },
@@ -62,8 +74,13 @@ const router = createBrowserRouter([
       { path: "users", Component: UserList },
       { path: "products", Component: AdminProductList },
       { path: "add-product", Component: AdminAddProduct },
+      { path: "update-product/:id", Component: AdminAddProduct },
       { path: "orders", Component: OrderList },
       { path: "orders/:id", Component: OrderDetails },
+      { path: "view-product/:id", Component: ViewProduct },
+      { path: "categories", Component: CategoryList },
+      {path:"add-category", Component: CategoryForm},
+
     ]
   }
 ]);

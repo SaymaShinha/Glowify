@@ -1,8 +1,15 @@
-// middleware/errorMiddleware.js
-export const errorHandler = (err, req, res, next) => {
-  console.error(err);
+export const errorHandler = (
+  err,
+  req,
+  res,
+  next
+) => {
 
-  res.status(res.statusCode || 500).json({
-    message: err.message || "Server Error",
+  console.log("FULL ERROR:");
+  console.log(err);
+
+  res.status(500).json({
+    success: false,
+    message: err.message,
   });
 };
