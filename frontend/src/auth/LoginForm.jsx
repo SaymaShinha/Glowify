@@ -30,13 +30,14 @@ export default function LoginForm() {
             if (res.ok) {
                 console.log(resData.data._id);
                 const id = resData.data._id;
+                localStorage.setItem("userId", id);
                 setUserName(resData.data.name);
                 localStorage.setItem("token", resData.token);
                 localStorage.setItem("role", resData.role);
                 setLoading(false);
                 setShowModal(true);
 
-                resData.role == "admin" ? navigate(`/admin`) : navigate(`/${id}`)
+                resData.role == "admin" ? navigate(`/admin`) : navigate(`/`)
 
             } else {
                 console.log("Error:", resData.message);

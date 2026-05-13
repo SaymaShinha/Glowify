@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router";
 
 export default function UserProfile() {
     const [user, setUser] = useState({
@@ -9,7 +8,7 @@ export default function UserProfile() {
         addresses: [],
     });
     const token = localStorage.getItem("token");
-    const { id } = useParams();
+    const id = localStorage.getItem("userId");
 
     useEffect(() => {
         try {

@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
+import Loading from "../../components/Loading.jsx";
 
 export default function ProductForm() {
-  const { id } = useParams();
+  const {id} = useParams();
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [product, setProduct] = useState([]);

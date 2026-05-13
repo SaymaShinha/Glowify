@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import ProtectedRoute from "../routes/ProtectRoute.jsx";
 
 
 export default function WebHeader() {
   const navigate = useNavigate();
-  const {id} = useParams();
 
   const [theme, setTheme] = useState("cosmetic");
   const [cartCount, setCartCount] = useState(0);
@@ -57,7 +56,7 @@ export default function WebHeader() {
         </div>
 
         {/* Logo */}
-        <a className="btn btn-ghost text-xl font-bold" href={`/${id}`}>
+        <a className="btn btn-ghost text-xl font-bold" href={`/`}>
           Glowify
         </a>
       </div>
@@ -80,7 +79,7 @@ export default function WebHeader() {
           <span className="indicator-item badge badge-primary badge-sm">
             {cartCount}
           </span>
-          <button className="btn btn-ghost btn-circle" onClick={() => navigate(`/cart/${id}`)}>
+          <button className="btn btn-ghost btn-circle" onClick={() => navigate(`/cart`)}>
             🛒
           </button>
         </div>
@@ -95,8 +94,8 @@ export default function WebHeader() {
               tabIndex={0}
               className="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
             >
-              <li><a onClick={() => navigate(`/user-profile/${id}`)}>Profile</a></li>
-              <li><a onClick={()=>navigate(`/orders/user/${id}`)}>Orders</a></li>
+              <li><a onClick={() => navigate(`/user-profile`)}>Profile</a></li>
+              <li><a onClick={()=>navigate(`/orders/user`)}>Orders</a></li>
               <li><a onClick={() => removeAuth()}>Logout</a></li>
             </ul>
           </div>

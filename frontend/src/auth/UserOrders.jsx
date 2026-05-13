@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router";
 
 export default function UserOrders() {
-    const { id } = useParams();
     const [userOrders, setUserOrders] = useState();
     const token = localStorage.getItem("token");
+    const id = localStorage.getItem("userId");
 
     useEffect(() => {
         try {

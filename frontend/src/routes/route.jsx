@@ -34,12 +34,11 @@ const router = createBrowserRouter([
     Component: App,
     children: [
       { index: true, Component: Home },
-      { path: "/:id", Component: Home },
       { path: "/productlist", Component: ProductList },
       { path: "/productlist/:name", Component: ProductList },
       { path: "/productlist/:shopDeal", Component: ProductList },
       {
-        path: "/cart/:id", element:
+        path: "/cart", element:
           (<ProtectedRoute>
             <Cart></Cart>
           </ProtectedRoute>)
@@ -50,12 +49,12 @@ const router = createBrowserRouter([
         </ProtectedRoute>)
       },
       {
-        path: "/user-profile/:id", element: (<ProtectedRoute>
+        path: "/user-profile", element: (<ProtectedRoute>
           <UserProfile></UserProfile>
         </ProtectedRoute>)
       },
       {
-        path: "/orders/user/:id", element: (<ProtectedRoute>
+        path: "/orders/user", element: (<ProtectedRoute>
           <UserOrders></UserOrders>
         </ProtectedRoute>)
       },

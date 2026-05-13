@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Loading from "../../components/Loading.jsx";
 
 export default function CategoryForm() {
 
