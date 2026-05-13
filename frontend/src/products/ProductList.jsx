@@ -146,7 +146,7 @@ export default function ProductList() {
             >
               <option value="all">All</option>
               {categories.map((cat) => (
-                <option value={cat} key={cat}>{cat}</option>
+                <option value={cat.name} key={cat}>{cat.name}</option>
               ))}
             </select>
           </div>
